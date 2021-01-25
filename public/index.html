@@ -18,14 +18,17 @@
         <button class="bg-gray-500 mt-8 px-8 py-4 rounded-sm uppercase font-bold tracking-wide" id="open-random">Random Recipe</button>                    
     </div>
 
+
     <!-- MODAL -->
-    <div id="overlay" class="bg-gray-200 bg-opacity-50 absolute inset-0 justify-center items-center hidden">
-        <div class="bg-gray-200">
-            <div class="flex justify-center">TEST IMAGE</div>
-            <div class="flex justify-between items-center space-x-3">
-                <div>TEST INGREDIENTS</div>
-                <div>TEST RECIPE</div>
+    <div id="overlay" class="bg-gray-200 bg-opacity-50 justify-center items-center absolute inset-0 hidden">
+        <div class="bg-gray-200 p-8">
+            <img class=" w-full h-72 object-contain" id="random-drink-image"/>
+            <div class="ml-16" id="random-drink-name">DRINK NAME</div>
+            <div class="flex justify-between">
+                <div class="ml-16" id="random-drink-ingr"></div>
+                <div class="mr-16 border border-red-500 w-72 text-center" id="random-drink-recipe">TEST RECIPE</div>
             </div>
+        
             <div class="flex justify-center">
                 <a id="close" href="#">Close</a>
             </div>

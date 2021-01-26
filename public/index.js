@@ -18,6 +18,7 @@ randomBtn.addEventListener("click", function() {
     overlay.classList.add("flex")
 })
 
+
 async function randomRecipe() {
     const recipePromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php");
     
@@ -58,3 +59,20 @@ async function randomRecipe() {
     }
 }
 randomRecipe();
+
+
+
+
+
+
+//DROPDOWN MENU
+const select = document.querySelector("#select")
+let arrays = ["Cosmopolitan", "Manhattan", "Margarita"]
+
+for(let i=0; i<arrays.length; i++) {
+    let option = document.createElement("option")
+    let txt=document.createTextNode(arrays[i])
+    option.appendChild(txt)
+    //option.setAttribute("value", arrays[i])
+    select.insertBefore(option, select.lastChild)
+}

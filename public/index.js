@@ -69,58 +69,68 @@ randomRecipe();
 //-----------------------------DROPDOWN SELECT LIST PART OF THE PROJECT, BUGS THAT NEED FIXING
 
 //this code will make sure only the selected option from the menu (such as === Margatita) displays getMargarita() function (I found parts of this code on stackoverflow)
-let submitBtn = document.querySelector("#submit")
-//this is the dropdown portion of the project
-submitBtn.addEventListener("click", function() {
-    var dd = document.getElementById("select");
-    console.log(dd.options[dd.selectedIndex].innerHTML);
-        if(dd.options[dd.selectedIndex].innerHTML === "Margarita") {
-            overlay.classList.remove("hidden")
-            overlay.classList.add("flex")
-            getMargarita()    //this is supposed to open a modal with margarita and it does but the width of the modal changes for some reason
-        }
+// let submitBtn = document.querySelector("#submit")
+// //this is the dropdown portion of the project
+// submitBtn.addEventListener("click", function() {
+//     var dd = document.getElementById("select");
+//     console.log(dd.options[dd.selectedIndex].innerHTML);
+//         if(dd.options[dd.selectedIndex].innerHTML === "Margarita") {
+//             overlay.classList.remove("hidden")
+//             overlay.classList.add("flex")
+//             getMargarita()    //this is supposed to open a modal with margarita and it does but the width of the modal changes for some reason
+//         }
+// })
+
+const select = document.querySelector("#select")
+select.addEventListener("change", function() {
+    if (select.value === "margarita") {
+        overlay.classList.remove("hidden")
+        overlay.classList.add("flex")
+    }
+    else {
+        console.log("not margarita")
+    }
 })
 
 
-
 //I copied this function from getRandom() function, only changed values to match margarita's API
-async function getMargarita() {
-    const margaritaPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita");
+// async function getMargarita() {
+//     const margaritaPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita");
 
-    if(margaritaPromise.ok) {
-        const margaritaParse = await margaritaPromise.json();
-        let margarita = margaritaParse.drinks[0]
-        console.log(margarita)
-        randomDrinkName.innerHTML = margarita.strDrink
-        randomDrinkImage.src = margarita.strDrinkThumb
-        randomDrinkRecipe.innerHTML = margarita.strInstructions
+//     if(margaritaPromise.ok) {
+//         const margaritaParse = await margaritaPromise.json();
+//         let margarita = margaritaParse.drinks[0]
+//         console.log(margarita)
+//         randomDrinkName.innerHTML = margarita.strDrink
+//         randomDrinkImage.src = margarita.strDrinkThumb
+//         randomDrinkRecipe.innerHTML = margarita.strInstructions
         
-        let margaritaIngr = [];
-        for(let i=1; i<=15; i++) {
+//         let margaritaIngr = [];
+//         for(let i=1; i<=15; i++) {
 
-            if(margarita[`strIngredient${i}`]  === null) {
-                break;
-            }
+//             if(margarita[`strIngredient${i}`]  === null) {
+//                 break;
+//             }
             
-            if(margarita[`strMeasure${i}`]  === null && margarita[`strIngredient${i}`] !== null) {
-                margaritaIngr.push(margarita[`strIngredient${i}`])
-            }
+//             if(margarita[`strMeasure${i}`]  === null && margarita[`strIngredient${i}`] !== null) {
+//                 margaritaIngr.push(margarita[`strIngredient${i}`])
+//             }
 
-            if(margarita[`strMeasure${i}`]  !== null && margarita[`strIngredient${i}`] !== null) {
-                margaritaIngr.push(margarita[`strMeasure${i}`] + " " + margarita[`strIngredient${i}`])
-            }
+//             if(margarita[`strMeasure${i}`]  !== null && margarita[`strIngredient${i}`] !== null) {
+//                 margaritaIngr.push(margarita[`strMeasure${i}`] + " " + margarita[`strIngredient${i}`])
+//             }
 
 
 
-            var margaritastr = "<ul>"
-            margaritaIngr.forEach(function(element) {
-                margaritastr += "<li>" + element + "</li>"
-            })
-            margaritastr += "</ul>"
-            randomDrinkIngredient.innerHTML = margaritastr
+//             var margaritastr = "<ul>"
+//             margaritaIngr.forEach(function(element) {
+//                 margaritastr += "<li>" + element + "</li>"
+//             })
+//             margaritastr += "</ul>"
+//             randomDrinkIngredient.innerHTML = margaritastr
 
-        }
-    }
+//         }
+//     }
 
-}
-getMargarita() //for some reason when getMargarita() API loads second, when I click "RANDOM RECIPE" button it displays this function even though it has no access to it
+// }
+// getMargarita() //for some reason when getMargarita() API loads second, when I click "RANDOM RECIPE" button it displays this function even though it has no access to it

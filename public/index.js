@@ -1,4 +1,3 @@
-//-----------------------------RANDOM RECIPE PART OF THE PROJECT //THIS ALL WORKS FINE
 const closeBtn = document.querySelector("#close")
 const randomBtn = document.querySelector("#open-random")
 const overlay = document.querySelector("#overlay")
@@ -18,119 +17,195 @@ closeBtn.addEventListener("click", function() {
 randomBtn.addEventListener("click", function() {
     overlay.classList.remove("hidden")
     overlay.classList.add("flex")
-
 })
 
 
+//---------------------------------------------RANDOM DRINK PART OF THE PROJECT
 async function randomRecipe() {
     const recipePromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php");
     
     if (recipePromise.ok) {
         const getRandom = await recipePromise.json();
-        console.log(getRandom.drinks[0]) //will pull new drink 0 each time. "drinks" -> check API link
-        randomDrinkName.innerHTML = getRandom.drinks[0].strDrink
-        randomDrinkImage.src = getRandom.drinks[0].strDrinkThumb
-        randomDrinkRecipe.innerHTML = getRandom.drinks[0].strInstructions
+        console.log(getRandom.drinks[0]) //ACCESSES VALUE OF .DRINKS[0] OF THIS API
+        const randomDrink = getRandom.drinks[0] //ASSIGNS A FETCHED DRINK TO A VARIABLE
+        randomDrinkName.innerHTML = randomDrink.strDrink //DRINK NAME WILL BE PLACED IN APPROPRIATE HTML LOC
+        randomDrinkImage.src = randomDrink.strDrinkThumb //DRINK IMAGE WILL BE PLACED IN APPROPRIATE HTML LOC
+        randomDrinkRecipe.innerHTML = randomDrink.strInstructions //DRINK INSTRUCTIONS WILL BE PLACED IN APPROPRIATE LOC
 
-        let ingr = [];
+
+        //CREATES A RANDOMARRAY TO STORE THE FETCHED INGERDIENTS AND THEIR MEASUREMENTS
+        let randomArray = [];
+        //THERE ARE 15 POSSIBLE INGREGIENTS SO IT WILL LOOP THROUGH THEM ALL
         for(let i=1; i<=15; i++) {
 
-            if(getRandom.drinks[0][`strIngredient${i}`]  === null) {
+            //IF THERE ARE "NULL" VALUES IN IGREDIENTS, IT WILL STOP THE LOOP
+            if(randomDrink[`strIngredient${i}`]  === null) {
                 break;
             }
-            
-            if(getRandom.drinks[0][`strMeasure${i}`]  === null && getRandom.drinks[0][`strIngredient${i}`] !== null) {
-                ingr.push(getRandom.drinks[0][`strIngredient${i}`])
+            //IF THERE ARE NO MEASUREMENT AND THERE ARE INGREDIENTS, IT PUSHES JUST THE INGREDIENTS INTO THE ARRAY
+            if(randomDrink[`strMeasure${i}`]  === null && randomDrink[`strIngredient${i}`] !== null) {
+                randomArray.push(randomDrink[`strIngredient${i}`])
             }
-
+            //IF THERE ARE INGREDIENTS AND THERE ARE MEASUREMENTS, IT PUSHES THEM BOTH IN THE ARRAY
             if(getRandom.drinks[0][`strMeasure${i}`]  !== null && getRandom.drinks[0][`strIngredient${i}`] !== null) {
-                ingr.push(getRandom.drinks[0][`strMeasure${i}`] + " " + getRandom.drinks[0][`strIngredient${i}`])
+                randomArray.push(randomDrink[`strMeasure${i}`] + " " + randomDrink[`strIngredient${i}`])
             }
-
-            //ingr.push(getRandom.drinks[0][`strMeasure${i}`] + getRandom.drinks[0][`strIngredient${i}`])
-            console.log(ingr)
-            //randomDrinkIngredient.innerHTML = ingr
-
-            var str = "<ul>"
-            ingr.forEach(function(element) {
-                str += "<li>" + element + "</li>"
+            console.log(randomArray)
+     
+            //THIS CODE WILL ALLOW THE MEASUREMENT AND INGREDIENTS TO BE DISPLAYED VERTICALLY (AS A LIST)
+            var str = "<div>"
+            randomArray.forEach(function(element) {
+                str += "<div>" + element 
             })
-            str += "</ul>"
+            str += "</div>"
             randomDrinkIngredient.innerHTML = str
-
         }
     }
 }
-randomRecipe();
+randomRecipe(); //EXECUTES THE FUNCTION
 
 
 
 
-//-----------------------------DROPDOWN SELECT LIST PART OF THE PROJECT, BUGS THAT NEED FIXING
-
-//this code will make sure only the selected option from the menu (such as === Margatita) displays getMargarita() function (I found parts of this code on stackoverflow)
-// let submitBtn = document.querySelector("#submit")
-// //this is the dropdown portion of the project
-// submitBtn.addEventListener("click", function() {
-//     var dd = document.getElementById("select");
-//     console.log(dd.options[dd.selectedIndex].innerHTML);
-//         if(dd.options[dd.selectedIndex].innerHTML === "Margarita") {
-//             overlay.classList.remove("hidden")
-//             overlay.classList.add("flex")
-//             getMargarita()    //this is supposed to open a modal with margarita and it does but the width of the modal changes for some reason
-//         }
-// })
-
+//---------------------------------------------DROPDOWN SELECT LIST PART OF THE PROJECT 
 const select = document.querySelector("#select")
+//EACH VALUE IN THE DROPDOWN SELECT LIST WILL CALL THE SPECIFIC FUNCTION
 select.addEventListener("change", function() {
     if (select.value === "margarita") {
         overlay.classList.remove("hidden")
         overlay.classList.add("flex")
+        getMartini()
     }
-    else {
-        console.log("not margarita")
+    else if (select.value === "whiskey-sour") {
+        overlay.classList.remove("hidden")
+        overlay.classList.add("flex")
+        getWhiskeySour()
+    }
+    else if (select.value === "cosmopolitan") {
+        overlay.classList.remove("hidden")
+        overlay.classList.add("flex")
+        getCosmopolitan()
     }
 })
 
 
-//I copied this function from getRandom() function, only changed values to match margarita's API
-// async function getMargarita() {
-//     const margaritaPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita");
 
-//     if(margaritaPromise.ok) {
-//         const margaritaParse = await margaritaPromise.json();
-//         let margarita = margaritaParse.drinks[0]
-//         console.log(margarita)
-//         randomDrinkName.innerHTML = margarita.strDrink
-//         randomDrinkImage.src = margarita.strDrinkThumb
-//         randomDrinkRecipe.innerHTML = margarita.strInstructions
-        
-//         let margaritaIngr = [];
-//         for(let i=1; i<=15; i++) {
+//---------------------------------------------FETCH MARTINI
+async function getMartini() {
+    const martiniPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=martini");
+    
+    if (martiniPromise.ok) {
+        const getMartini = await martiniPromise.json();
+        console.log(getMartini.drinks[0]) 
+        const martiniDrink = getMartini.drinks[0]
+        randomDrinkName.innerHTML = martiniDrink.strDrink
+        randomDrinkImage.src = martiniDrink.strDrinkThumb
+        randomDrinkRecipe.innerHTML = martiniDrink.strInstructions
 
-//             if(margarita[`strIngredient${i}`]  === null) {
-//                 break;
-//             }
+        let martiniArray = [];
+        for(let i=1; i<=15; i++) {
+            if(martiniDrink[`strIngredient${i}`]  === null) {
+                break;
+            }
             
-//             if(margarita[`strMeasure${i}`]  === null && margarita[`strIngredient${i}`] !== null) {
-//                 margaritaIngr.push(margarita[`strIngredient${i}`])
-//             }
+            if(martiniDrink[`strMeasure${i}`]  === null && martiniDrink[`strIngredient${i}`] !== null) {
+                martiniArray.push(getMargarita.drinks[0][`strIngredient${i}`])
+            }
 
-//             if(margarita[`strMeasure${i}`]  !== null && margarita[`strIngredient${i}`] !== null) {
-//                 margaritaIngr.push(margarita[`strMeasure${i}`] + " " + margarita[`strIngredient${i}`])
-//             }
+            if(martiniDrink[`strMeasure${i}`]  !== null && martiniDrink[`strIngredient${i}`] !== null) {
+                martiniArray.push(martiniDrink[`strMeasure${i}`] + " " + martiniDrink[`strIngredient${i}`])
+            }
+
+            console.log(martiniArray)
+        }
+
+        var str = "<div>"
+        martiniArray.forEach(function(element) {
+            str += "<div>" + element 
+        })
+        // str += "</div>"
+        randomDrinkIngredient.innerHTML = str
+    }
+}
+getMartini();
 
 
 
-//             var margaritastr = "<ul>"
-//             margaritaIngr.forEach(function(element) {
-//                 margaritastr += "<li>" + element + "</li>"
-//             })
-//             margaritastr += "</ul>"
-//             randomDrinkIngredient.innerHTML = margaritastr
+//---------------------------------------------FETCH WHISKEY SOUR
+async function getWhiskeySour() {
+    const whiskeySourPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=whiskey_sour");
+    
+    if (whiskeySourPromise.ok) {
+        const getWhiskeySour = await whiskeySourPromise.json();
+        console.log(getWhiskeySour.drinks[0]) //will pull new drink 0 each time. "drinks" -> check API link
+        const whiskeySourDrink = getWhiskeySour.drinks[0]
+        randomDrinkName.innerHTML = whiskeySourDrink.strDrink
+        randomDrinkImage.src = whiskeySourDrink.strDrinkThumb
+        randomDrinkRecipe.innerHTML = whiskeySourDrink.strInstructions
 
-//         }
-//     }
+        let whiskeSourArray = [];
+        for(let i=1; i<=15; i++) {
 
-// }
-// getMargarita() //for some reason when getMargarita() API loads second, when I click "RANDOM RECIPE" button it displays this function even though it has no access to it
+            if(whiskeySourDrink[`strIngredient${i}`]  === null) {
+                break;
+            }
+            
+            if(whiskeySourDrink[`strMeasure${i}`]  === null && whiskeySourDrink[`strIngredient${i}`] !== null) {
+                whiskeSourArray.push(getMargarita.drinks[0][`strIngredient${i}`])
+            }
+
+            if(whiskeySourDrink[`strMeasure${i}`]  !== null && whiskeySourDrink[`strIngredient${i}`] !== null) {
+                whiskeSourArray.push(whiskeySourDrink[`strMeasure${i}`] + " " + whiskeySourDrink[`strIngredient${i}`])
+            }
+
+            console.log(whiskeSourArray)
+
+            var str = "<div>"
+            whiskeSourArray.forEach(function(element) {
+                str += "<div>" + element 
+            })
+            randomDrinkIngredient.innerHTML = str
+        }
+    }
+}
+getWhiskeySour();
+
+
+//---------------------------------------------FETCH COSMOPOLITAN
+async function getCosmopolitan() {
+    const cosmopolitanPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=cosmopolitan");
+    
+    if (cosmopolitanPromise.ok) {
+        const getCosmopolitan = await cosmopolitanPromise.json();
+        console.log(getCosmopolitan.drinks[0]) //will pull new drink 0 each time. "drinks" -> check API link
+        const cosmopolitanDrink = getCosmopolitan.drinks[0]
+        randomDrinkName.innerHTML = cosmopolitanDrink.strDrink
+        randomDrinkImage.src = cosmopolitanDrink.strDrinkThumb
+        randomDrinkRecipe.innerHTML = cosmopolitanDrink.strInstructions
+
+        let cosmopolitanArray = [];
+        for(let i=1; i<=15; i++) {
+            if(cosmopolitanDrink[`strIngredient${i}`]  === null) {
+                break;
+            }
+            
+            if(cosmopolitanDrink[`strMeasure${i}`]  === null && cosmopolitanDrink[`strIngredient${i}`] !== null) {
+                cosmopolitanArray.push(getMargarita.drinks[0][`strIngredient${i}`])
+            }
+
+            if(cosmopolitanDrink[`strMeasure${i}`]  !== null && cosmopolitanDrink[`strIngredient${i}`] !== null) {
+                cosmopolitanArray.push(cosmopolitanDrink[`strMeasure${i}`] + " " + cosmopolitanDrink[`strIngredient${i}`])
+            }
+
+            console.log(cosmopolitanArray)
+        }
+
+        var str = "<div>"
+        cosmopolitanArray.forEach(function(element) {
+            str += "<div>" + element 
+        })
+
+        randomDrinkIngredient.innerHTML = str
+    }
+}
+getCosmopolitan();

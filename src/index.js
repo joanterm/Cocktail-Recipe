@@ -6,14 +6,14 @@ const randomDrinkImage = document.querySelector("#random-drink-image")
 const randomDrinkIngredient = document.querySelector("#random-drink-ingr")
 const randomDrinkRecipe = document.querySelector("#random-drink-recipe")
 
-//CLOSES THE OVERLAY AND FIRES RANDOMRECIPE FUNCTION (SO THAT IT'S ALREADY LOADED ONCE RANDOMBTN GETS CLICKED)
-closeBtn.addEventListener("click", ( ) => {
+
+closeBtn.addEventListener("click", () => {
     overlay.classList.add("hidden") 
     overlay.classList.remove("flex")
     randomRecipe()
 })
 
-//DISPLAYS THE OVERLAY (RANDOM RECIPE FUNCTION IS ALREADY LOADED)
+
 randomBtn.addEventListener("click", () => {
     overlay.classList.remove("hidden")
     overlay.classList.add("flex")
@@ -21,56 +21,57 @@ randomBtn.addEventListener("click", () => {
 
 
 //---------------------------------------------RANDOM DRINK PART OF THE PROJECT
-async function randomRecipe() {
-    const recipePromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php");
-    
-    if (recipePromise.ok) {
-        const getRandom = await recipePromise.json();
-        console.log(getRandom.drinks[0]) //ACCESSES VALUE OF .DRINKS[0] OF THIS API
-        const randomDrink = getRandom.drinks[0] //ASSIGNS A FETCHED DRINK TO A VARIABLE
-        randomDrinkName.innerHTML = randomDrink.strDrink //DRINK NAME WILL BE PLACED IN APPROPRIATE HTML LOC
-        randomDrinkImage.src = randomDrink.strDrinkThumb //DRINK IMAGE WILL BE PLACED IN APPROPRIATE HTML LOC
-        randomDrinkRecipe.innerHTML = randomDrink.strInstructions //DRINK INSTRUCTIONS WILL BE PLACED IN APPROPRIATE LOC
+function randomRecipe() {
+    fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php")
+      .then(response => {
+          if (!response.ok) {
+              throw Error(`Something went wrong, your error code is: ${response.status}`)
+          }
+        return response.json()
+    }).then(data => {
+        const randomDrink = data.drinks[0]
+        console.log(randomDrink)
+        randomDrinkName.innerHTML = randomDrink.strDrink 
+        randomDrinkImage.src = randomDrink.strDrinkThumb 
+        randomDrinkRecipe.innerHTML = randomDrink.strInstructions 
 
-
-        //CREATES A RANDOMARRAY TO STORE THE FETCHED INGERDIENTS AND THEIR MEASUREMENTS
         let randomArray = [];
-        //THERE ARE 15 POSSIBLE INGREGIENTS SO IT WILL LOOP THROUGH THEM ALL
         for(let i=1; i<=15; i++) {
 
-            //IF THERE ARE "NULL" VALUES IN IGREDIENTS, IT WILL STOP THE LOOP
             if(randomDrink[`strIngredient${i}`]  === null) {
                 break;
             }
-            //IF THERE ARE NO MEASUREMENT AND THERE ARE INGREDIENTS, IT PUSHES JUST THE INGREDIENTS INTO THE ARRAY
+
             if(randomDrink[`strMeasure${i}`]  === null && randomDrink[`strIngredient${i}`] !== null) {
                 randomArray.push(randomDrink[`strIngredient${i}`])
             }
-            //IF THERE ARE INGREDIENTS AND THERE ARE MEASUREMENTS, IT PUSHES THEM BOTH IN THE ARRAY
-            if(getRandom.drinks[0][`strMeasure${i}`]  !== null && getRandom.drinks[0][`strIngredient${i}`] !== null) {
+
+            if(randomDrink[`strMeasure${i}`]  !== null && randomDrink[`strIngredient${i}`] !== null) {
                 randomArray.push(randomDrink[`strMeasure${i}`] + " " + randomDrink[`strIngredient${i}`])
             }
+
             console.log(randomArray)
      
-            //THIS CODE WILL ALLOW THE MEASUREMENT AND INGREDIENTS TO BE DISPLAYED VERTICALLY (AS A LIST)
-            var str = "<div>"
-            randomArray.forEach(function(element) { //put this in a variable 
-                str += "<div>" + element 
+            
+            let ingredientList = "<div>"
+            randomArray.forEach((element) => { 
+                ingredientList += "<div>" + element 
             })
-            str += "</div>"
-            randomDrinkIngredient.innerHTML = str
+            randomDrinkIngredient.innerHTML = ingredientList         
         }
-    }
+
+    }).catch(error => {
+        return error
+    })
 }
-randomRecipe(); //EXECUTES THE FUNCTION
+randomRecipe()
 
 
 
-
-//---------------------------------------------DROPDOWN SELECT LIST PART OF THE PROJECT 
+// ---------------------------------------------DROPDOWN SELECT LIST PART OF THE PROJECT 
 const select = document.querySelector("#select")
 //EACH VALUE IN THE DROPDOWN SELECT LIST WILL CALL THE SPECIFIC FUNCTION
-select.addEventListener("change", function() {
+select.addEventListener("change", () => {
     if (select.value === "margarita") {
         overlay.classList.remove("hidden")
         overlay.classList.add("flex")
@@ -87,7 +88,6 @@ select.addEventListener("change", function() {
         getCosmopolitan()
     }
 })
-
 
 
 //---------------------------------------------FETCH MARTINI
@@ -119,12 +119,11 @@ async function getMartini() {
             console.log(martiniArray)
         }
 
-        var str = "<div>"
-        martiniArray.forEach(function(element) {
-            str += "<div>" + element 
+        let ingredientList = "<div>"
+        martiniArray.forEach((element) => {
+            ingredientList += "<div>" + element 
         })
-        // str += "</div>"
-        randomDrinkIngredient.innerHTML = str
+        randomDrinkIngredient.innerHTML = ingredientList
     }
 }
 getMartini();
@@ -160,11 +159,11 @@ async function getWhiskeySour() {
 
             console.log(whiskeSourArray)
 
-            var str = "<div>"
-            whiskeSourArray.forEach(function(element) {
-                str += "<div>" + element 
+            let ingredientList = "<div>"
+            whiskeSourArray.forEach((element) => {
+                ingredientList += "<div>" + element 
             })
-            randomDrinkIngredient.innerHTML = str
+            randomDrinkIngredient.innerHTML = ingredientList
         }
     }
 }
@@ -200,12 +199,11 @@ async function getCosmopolitan() {
             console.log(cosmopolitanArray)
         }
 
-        var str = "<div>"
-        cosmopolitanArray.forEach(function(element) {
-            str += "<div>" + element 
+        let ingredientList = "<div>"
+        cosmopolitanArray.forEach((element) => {
+            ingredientList += "<div>" + element 
         })
-
-        randomDrinkIngredient.innerHTML = str
+        randomDrinkIngredient.innerHTML = ingredientList
     }
 }
 getCosmopolitan();

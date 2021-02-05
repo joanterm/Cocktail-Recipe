@@ -35,6 +35,7 @@ function randomRecipe() {
         randomDrinkImage.src = randomDrink.strDrinkThumb 
         randomDrinkRecipe.innerHTML = randomDrink.strInstructions 
 
+        //THERE ARE 15 POSSIBLE INGREDIENTS TO CHOOSE FROM MARKED STRINGREDIENT1-STRINGREDIENT15 (SOME W/ NULL VALUES)
         let randomArray = [];
         for(let i=1; i<=15; i++) {
 
@@ -70,7 +71,6 @@ randomRecipe()
 
 // ---------------------------------------------DROPDOWN SELECT LIST PART OF THE PROJECT 
 const select = document.querySelector("#select")
-//EACH VALUE IN THE DROPDOWN SELECT LIST WILL CALL THE SPECIFIC FUNCTION
 select.addEventListener("change", () => {
     if (select.value === "margarita") {
         overlay.classList.remove("hidden")
@@ -91,25 +91,29 @@ select.addEventListener("change", () => {
 
 
 //---------------------------------------------FETCH MARTINI
-async function getMartini() {
-    const martiniPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=martini");
-    
-    if (martiniPromise.ok) {
-        const getMartini = await martiniPromise.json();
-        console.log(getMartini.drinks[0]) 
-        const martiniDrink = getMartini.drinks[0]
-        randomDrinkName.innerHTML = martiniDrink.strDrink
-        randomDrinkImage.src = martiniDrink.strDrinkThumb
-        randomDrinkRecipe.innerHTML = martiniDrink.strInstructions
+function getMartini() {
+    fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=martini")
+      .then(response => {
+          if (!response.ok) {
+              throw Error(`Something went wrong, your error code is: ${response.status}`)
+          }
+        return response.json()
+    }).then(data => {
+        const martiniDrink = data.drinks[0]
+        console.log(martiniDrink)
+        randomDrinkName.innerHTML = martiniDrink.strDrink 
+        randomDrinkImage.src = martiniDrink.strDrinkThumb 
+        randomDrinkRecipe.innerHTML = martiniDrink.strInstructions 
 
         let martiniArray = [];
         for(let i=1; i<=15; i++) {
+
             if(martiniDrink[`strIngredient${i}`]  === null) {
                 break;
             }
-            
+
             if(martiniDrink[`strMeasure${i}`]  === null && martiniDrink[`strIngredient${i}`] !== null) {
-                martiniArray.push(getMargarita.drinks[0][`strIngredient${i}`])
+                martiniArray.push(randomDrink[`strIngredient${i}`])
             }
 
             if(martiniDrink[`strMeasure${i}`]  !== null && martiniDrink[`strIngredient${i}`] !== null) {
@@ -117,79 +121,94 @@ async function getMartini() {
             }
 
             console.log(martiniArray)
+     
+            
+            let martiniList = "<div>"
+            martiniArray.forEach((element) => { 
+                martiniList += "<div>" + element 
+            })
+            randomDrinkIngredient.innerHTML = martiniList        
         }
 
-        let ingredientList = "<div>"
-        martiniArray.forEach((element) => {
-            ingredientList += "<div>" + element 
-        })
-        randomDrinkIngredient.innerHTML = ingredientList
-    }
+    }).catch(error => {
+        return error
+    })
 }
-getMartini();
+getMartini()
 
 
 
 //---------------------------------------------FETCH WHISKEY SOUR
-async function getWhiskeySour() {
-    const whiskeySourPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=whiskey_sour");
-    
-    if (whiskeySourPromise.ok) {
-        const getWhiskeySour = await whiskeySourPromise.json();
-        console.log(getWhiskeySour.drinks[0]) //will pull new drink 0 each time. "drinks" -> check API link
-        const whiskeySourDrink = getWhiskeySour.drinks[0]
-        randomDrinkName.innerHTML = whiskeySourDrink.strDrink
-        randomDrinkImage.src = whiskeySourDrink.strDrinkThumb
-        randomDrinkRecipe.innerHTML = whiskeySourDrink.strInstructions
+function getWhiskeySour() {
+    fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=whiskey_sour")
+      .then(response => {
+          if (!response.ok) {
+              throw Error(`Something went wrong, your error code is: ${response.status}`)
+          }
+        return response.json()
+    }).then(data => {
+        const whiskeySourDrink = data.drinks[0]
+        console.log(whiskeySourDrink)
+        randomDrinkName.innerHTML = whiskeySourDrink.strDrink 
+        randomDrinkImage.src = whiskeySourDrink.strDrinkThumb 
+        randomDrinkRecipe.innerHTML = whiskeySourDrink.strInstructions 
 
-        let whiskeSourArray = [];
+        let whiskeySourArray = [];
         for(let i=1; i<=15; i++) {
 
             if(whiskeySourDrink[`strIngredient${i}`]  === null) {
                 break;
             }
-            
+
             if(whiskeySourDrink[`strMeasure${i}`]  === null && whiskeySourDrink[`strIngredient${i}`] !== null) {
-                whiskeSourArray.push(getMargarita.drinks[0][`strIngredient${i}`])
+                whiskeySourArray.push(whiskeySourDrink[`strIngredient${i}`])
             }
 
             if(whiskeySourDrink[`strMeasure${i}`]  !== null && whiskeySourDrink[`strIngredient${i}`] !== null) {
-                whiskeSourArray.push(whiskeySourDrink[`strMeasure${i}`] + " " + whiskeySourDrink[`strIngredient${i}`])
+                whiskeySourArray.push(whiskeySourDrink[`strMeasure${i}`] + " " + whiskeySourDrink[`strIngredient${i}`])
             }
 
-            console.log(whiskeSourArray)
-
-            let ingredientList = "<div>"
-            whiskeSourArray.forEach((element) => {
-                ingredientList += "<div>" + element 
+            console.log(whiskeySourArray)
+     
+            
+            let whiskeySourList = "<div>"
+            whiskeySourArray.forEach((element) => { 
+                whiskeySourList += "<div>" + element 
             })
-            randomDrinkIngredient.innerHTML = ingredientList
+            randomDrinkIngredient.innerHTML = whiskeySourList        
         }
-    }
+
+    }).catch(error => {
+        return error
+    })
 }
-getWhiskeySour();
+getWhiskeySour()
 
 
 //---------------------------------------------FETCH COSMOPOLITAN
-async function getCosmopolitan() {
-    const cosmopolitanPromise = await fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=cosmopolitan");
-    
-    if (cosmopolitanPromise.ok) {
-        const getCosmopolitan = await cosmopolitanPromise.json();
-        console.log(getCosmopolitan.drinks[0]) //will pull new drink 0 each time. "drinks" -> check API link
-        const cosmopolitanDrink = getCosmopolitan.drinks[0]
-        randomDrinkName.innerHTML = cosmopolitanDrink.strDrink
-        randomDrinkImage.src = cosmopolitanDrink.strDrinkThumb
-        randomDrinkRecipe.innerHTML = cosmopolitanDrink.strInstructions
+function getCosmopolitan() {
+    fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=cosmopolitan")
+      .then(response => {
+          if (!response.ok) {
+              throw Error(`Something went wrong, your error code is: ${response.status}`)
+          }
+        return response.json()
+    }).then(data => {
+        const cosmopolitanDrink = data.drinks[0]
+        console.log(cosmopolitanDrink)
+        randomDrinkName.innerHTML = cosmopolitanDrink.strDrink 
+        randomDrinkImage.src = cosmopolitanDrink.strDrinkThumb 
+        randomDrinkRecipe.innerHTML = cosmopolitanDrink.strInstructions 
 
         let cosmopolitanArray = [];
         for(let i=1; i<=15; i++) {
+
             if(cosmopolitanDrink[`strIngredient${i}`]  === null) {
                 break;
             }
-            
+
             if(cosmopolitanDrink[`strMeasure${i}`]  === null && cosmopolitanDrink[`strIngredient${i}`] !== null) {
-                cosmopolitanArray.push(getMargarita.drinks[0][`strIngredient${i}`])
+                cosmopolitanArray.push(cosmopolitanDrink[`strIngredient${i}`])
             }
 
             if(cosmopolitanDrink[`strMeasure${i}`]  !== null && cosmopolitanDrink[`strIngredient${i}`] !== null) {
@@ -197,13 +216,17 @@ async function getCosmopolitan() {
             }
 
             console.log(cosmopolitanArray)
+     
+            
+            let cosmopolitanList = "<div>"
+            cosmopolitanArray.forEach((element) => { 
+                cosmopolitanList += "<div>" + element 
+            })
+            randomDrinkIngredient.innerHTML = cosmopolitanList        
         }
 
-        let ingredientList = "<div>"
-        cosmopolitanArray.forEach((element) => {
-            ingredientList += "<div>" + element 
-        })
-        randomDrinkIngredient.innerHTML = ingredientList
-    }
+    }).catch(error => {
+        return error
+    })
 }
-getCosmopolitan();
+getCosmopolitan()

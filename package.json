@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-css": "npx tailwindcss-cli@latest build ./src/styles.css -o ./public/styles.css"
-    
+    "build-css": "npx tailwindcss-cli@latest build ./src/styles.css -o ./public/styles.css",
+    "format": "npx prettier --write ."
   },
   "keywords": [],
   "author": "",
@@ -14,5 +14,8 @@
     "autoprefixer": "^9.8.6",
     "postcss": "^7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2"
+  },
+  "devDependencies": {
+    "prettier": "2.2.1"
   }
 }

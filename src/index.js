@@ -35,6 +35,16 @@ select.addEventListener('change', () => {
   }
 });
 
+/*
+  ----------
+  SUGGESTION
+  ----------
+  
+  As the code currently exists, you may only need the randomRecipe() call below
+  
+  When the 'change' and 'click' events above are called, the effects of these calls are replaced.
+*/
+
 // Get the recipes
 randomRecipe();
 getMartini();

@@ -6,37 +6,4 @@ const randomDrinkImage = document.querySelector('#random-drink-image');
 const randomDrinkIngredient = document.querySelector('#random-drink-ingr');
 const randomDrinkRecipe = document.querySelector('#random-drink-recipe');
 
-closeBtn.addEventListener('click', () => {
-  overlay.classList.add('hidden');
-  overlay.classList.remove('flex');
-  randomRecipe();
-});
 
-randomBtn.addEventListener('click', () => {
-  overlay.classList.remove('hidden');
-  overlay.classList.add('flex');
-});
-
-const select = document.querySelector('#select');
-
-select.addEventListener('change', () => {
-  if (select.value === 'margarita') {
-    overlay.classList.remove('hidden');
-    overlay.classList.add('flex');
-    getMartini();
-  } else if (select.value === 'whiskey-sour') {
-    overlay.classList.remove('hidden');
-    overlay.classList.add('flex');
-    getWhiskeySour();
-  } else if (select.value === 'cosmopolitan') {
-    overlay.classList.remove('hidden');
-    overlay.classList.add('flex');
-    getCosmopolitan();
-  }
-});
-
-// Get the recipes
-randomRecipe();
-getMartini();
-getWhiskeySour();
-getCosmopolitan();

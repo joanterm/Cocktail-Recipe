@@ -37,6 +37,43 @@ updateUI = (data) => {
   }
 };
 
+const getAllDrinks = async () => {
+  const [
+    martiniPromise,
+    whiskeySourPromise,
+    cosmopolitanPromise,
+  ] = await Promise.all([
+    fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=martini'),
+    fetch(
+      'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=whiskey_sour'
+    ),
+    fetch(
+      'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=cosmopolitan'
+    ),
+  ]);
+  const martini = await martiniPromise.json();
+  const whiskeySour = await whiskeySourPromise.json();
+  const cosmopolitan = await cosmopolitanPromise.json();
+
+  const select = document.querySelector('#select');
+
+  select.addEventListener('change', () => {
+    if (select.value === 'margarita') {
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+      updateUI(martini);
+    } else if (select.value === 'whiskey-sour') {
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+      updateUI(whiskeySour);
+    } else if (select.value === 'cosmopolitan') {
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+      updateUI(cosmopolitan);
+    }
+  });
+};
+
 const randomRecipe = async () => {
   fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
     .then((response) => {
@@ -55,35 +92,16 @@ const randomRecipe = async () => {
     });
 };
 
-const getMartini = async () => {
-  const martiniPromise = await fetch(
-    'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=martini'
-  );
+closeBtn.addEventListener('click', () => {
+  overlay.classList.add('hidden');
+  overlay.classList.remove('flex');
+  randomRecipe();
+});
 
-  if (martiniPromise.ok) {
-    const getMartini = await martiniPromise.json();
-    updateUI(getMartini);
-  }
-};
+randomBtn.addEventListener('click', () => {
+  overlay.classList.remove('hidden');
+  overlay.classList.add('flex');
+});
 
-const getWhiskeySour = async () => {
-  const whiskeySourPromise = await fetch(
-    'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=whiskey_sour'
-  );
-
-  if (whiskeySourPromise.ok) {
-    const getWhiskeySour = await whiskeySourPromise.json();
-    updateUI(getWhiskeySour);
-  }
-};
-
-const getCosmopolitan = async () => {
-  const cosmopolitanPromise = await fetch(
-    'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=cosmopolitan'
-  );
-
-  if (cosmopolitanPromise.ok) {
-    const getCosmopolitan = await cosmopolitanPromise.json();
-    updateUI(getCosmopolitan);
-  }
-};
+getAllDrinks();
+randomRecipe();
